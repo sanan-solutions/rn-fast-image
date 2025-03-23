@@ -31,9 +31,10 @@ Pod::Spec.new do |s|
     s.source_files  = "ios/**/*.{h,mm}"
     s.dependency 'React-Core'
   end
-  s.dependency 'SDWebImage', '>= 5.19.1'
-  s.dependency 'SDWebImageWebPCoder', '~> 0.14'
+  s.dependency 'SDWebImage', '>= 5.21.0'
+  s.dependency 'SDWebImageWebPCoder', '~> 0.14.6'
   s.dependency 'SDWebImageAVIFCoder', '~> 0.11.0'
+  s.dependency 'SDWebImagePhotosPlugin', '~> 1.2.1'
   s.dependency 'libavif/libdav1d', '~> 0.11.1'
   s.dependency 'libavif/core', '~> 0.11.1'
 end
