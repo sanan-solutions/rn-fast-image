@@ -10,12 +10,20 @@ import type {
 type Headers = ReadonlyArray<Readonly<{ name: string; value: string }>>
 type Priority = WithDefault<'low' | 'normal' | 'high', 'normal'>
 type CacheControl = WithDefault<'immutable' | 'web' | 'cacheOnly', 'web'>
+type CacheStorage = WithDefault<'all' | 'diskOnly' | 'memoryOnly' | 'none', 'all'>
+type ThumbnailSizeType = WithDefault<'custom' | 'maxSize'|'matchViewSize', 'maxSize'>
 
 type FastImageSource = Readonly<{
     uri?: string
     headers?: Headers
     priority?: Priority
     cache?: CacheControl
+    cacheStorage?:CacheStorage
+    thumbnailSizeType?:ThumbnailSizeType
+    thumbnailSize?: {
+        width: number;
+        height: number;
+    }
 }>
 
 type OnLoadEvent = Readonly<{
