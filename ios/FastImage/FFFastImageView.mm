@@ -230,10 +230,47 @@
             }
             return [mutableRequest copy];
         }];
-        SDWebImageContext* context = @{SDWebImageContextDownloadRequestModifier: requestModifier};
-
+        
+        SDImageCacheType cacheType  = SDImageCacheTypeAll;
+        switch (_source.cacheStorage) {
+            case FFFCacheStorageNone:
+                cacheType = SDImageCacheTypeNone;
+                break;
+            case FFFCacheStorageDiskOnly:
+                cacheType = SDImageCacheTypeDisk;
+                break;
+            case FFFCacheStorageMemoryOnly:
+                cacheType = SDImageCacheTypeMemory;
+                break;
+            default:
+                cacheType = SDImageCacheTypeAll;
+        }
+        NSLog(@"widht: %d, height: %d", _source.thumbnailSize.width, _source.thumbnailSize.height);
+        NSLog(@"storaget: %ld", (long)cacheType);
+        CGSize thumbnailSize = CGSizeZero;
+        switch (_source.thumbnailSizeType) {
+            case FFFImageThumbnailMatchViewSize:
+                thumbnailSize = self.bounds.size;
+                break;
+            case FFFImageThumbnailCustomSize:
+                thumbnailSize = CGSizeMake(_source.thumbnailSize.width, _source.thumbnailSize.height);
+                break;
+            default:
+                thumbnailSize = CGSizeZero;
+        }
+        
+        SDWebImageContext* context = @{
+            SDWebImageContextDownloadRequestModifier: requestModifier,
+            SDWebImageContextStoreCacheType:@(cacheType),
+            SDWebImageContextImageThumbnailPixelSize:[NSValue valueWithCGSize:thumbnailSize]
+        };
+        
         // Set priority.
         SDWebImageOptions options = SDWebImageRetryFailed | SDWebImageHandleCookies;
+        if(cacheType == SDImageCacheTypeNone) {
+            options |= SDWebImageFromLoaderOnly;
+        }
+        
         switch (_source.priority) {
             case FFFPriorityLow:
                 options |= SDWebImageLowPriority;

@@ -56,11 +56,34 @@ const cacheControl = {
     cacheOnly: 'cacheOnly',
 } as const
 
+type CacheStorage = 'all' | 'diskOnly' | 'memoryOnly' | 'none'
+
+const cacheStorage = {
+    all: 'all',
+    diskOnly: 'diskOnly',
+    memoryOnly:'memoryOnly',
+    none: 'none'
+} as const
+
+type ThumbailSizeType = 'custom' | 'maxSize'|'matchViewSize'
+
+const thumbnailSizeType = {
+    custom:'custom',
+    maxSize:'maxSize',
+    matchViewSize:'matchViewSize'
+}as const
+
 export type Source = {
     uri?: string
     headers?: { [key: string]: string }
     priority?: Priority
     cache?: Cache
+    cacheStorage?:CacheStorage
+    thumbnailSizeType?:ThumbailSizeType
+    thumbnailSize?:{
+        width: number;
+        height: number;
+    }
 }
 
 export interface OnLoadEvent {
@@ -261,6 +284,8 @@ export interface FastImageStaticProperties {
     resizeMode: typeof resizeMode
     priority: typeof priority
     cacheControl: typeof cacheControl
+    cacheStorage: typeof cacheStorage
+    thumbnailSizeType: typeof thumbnailSizeType
     preload: (sources: Source[]) => void
     clearMemoryCache: () => Promise<void>
     clearDiskCache: () => Promise<void>
@@ -274,6 +299,10 @@ FastImage.resizeMode = resizeMode
 FastImage.cacheControl = cacheControl
 
 FastImage.priority = priority
+
+FastImage.cacheStorage = cacheStorage
+
+FastImage.thumbnailSizeType = thumbnailSizeType
 
 FastImage.preload = (sources: Source[]) => FastImageViewModule.preload(sources)
 
